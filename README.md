@@ -3,7 +3,7 @@
 
 **HORAS** es una aplicación web desarrollada para pequeñas empresas que necesitan gestionar de manera digital y centralizada el registro de horas trabajadas y las solicitudes de vacaciones. El sistema permite a los empleados registrar su jornada y solicitar vacaciones, y a los administradores aprobar o rechazar las peticiones, consultar calendarios y generar reportes.
 
-![Calendario anual](frontend/images/calendario-anual.png)
+![Calendario anual](imagenes/calendario-anual.png)
 
 ---
 
