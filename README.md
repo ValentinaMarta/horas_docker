@@ -69,8 +69,9 @@ docker-compose up --build
 
 Accede a la aplicación en:
 
-- Frontend: `http://localhost:3000`
-- Backend API: `http://localhost:5000`
+- Frontend: `http://localhost:5173`
+- Backend API: `http://localhost:4000`
+- pgAdmin: `http://localhost:5050`
 
 ---
 
