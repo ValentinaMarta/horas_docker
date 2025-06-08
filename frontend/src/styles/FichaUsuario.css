@@ -1,0 +1,88 @@
+.ficha-usuario {
+  padding: 24px;
+  background: #fff;
+  margin: 24px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  flex: 1;
+}
+
+.ficha-header {
+  margin-bottom: 16px;
+}
+
+.ficha-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #111827;
+}
+
+.ficha-header p {
+  margin: 4px 0 0;
+  color: #4b5563;
+}
+
+.btn-exportar {
+  margin-top: 16px;
+  background-color: #2563eb;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-exportar:hover {
+  background-color: #1d4ed8;
+}
+
+/* Colores del calendario */
+.verde {
+  background-color: #a7f3d0 !important;
+}
+.rojo {
+  background-color: #fecaca !important;
+}
+.gris {
+  background-color: #e5e7eb !important;
+}
+.calendarios-container {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.calendario-bloque {
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: white;
+}
+.seleccionado-vacaciones {
+  background-color: #fde68a !important; /* Amarillo claro */
+  border-radius: 50%;
+}
+
+.seleccionado-fichajes {
+  background-color: #bae6fd !important; /* Azul claro */
+  border-radius: 50%;
+}
+
+.mensaje-emergente {
+  background-color: #ffe0e0;
+  color: #a00;
+  padding: 10px 16px;
+  margin: 10px auto;
+  border: 1px solid #f5c2c2;
+  border-radius: 8px;
+  width: fit-content;
+  text-align: center;
+  font-weight: bold;
+  animation: aparecer 0.3s ease-in-out;
+}
+
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}

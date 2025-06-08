@@ -1,0 +1,49 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: horas_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: horas
+    ports:
+      - "5432:5432"
+    volumes:
+      - horas_postgres_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: horas_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: marta@horas.com
+      PGADMIN_DEFAULT_PASSWORD: horas
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+
+  backend:
+    build:
+      context: ./backend
+    container_name: horas_backend
+    ports:
+      - "4000:4000"
+    depends_on:
+      - postgres
+    environment:
+      - PORT=4000
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: horas_frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    environment:
+    - VITE_API_URL=http://backend:4000
+
+volumes:
+  horas_postgres_data:

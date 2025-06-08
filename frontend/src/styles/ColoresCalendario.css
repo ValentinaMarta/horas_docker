@@ -1,0 +1,15 @@
+/* Colores del calendario y leyenda */
+.azul     { background-color: #a6c5f7 !important; }
+.amarillo { background-color: #fff89c !important; }
+.naranja  { background-color: #ffc27c !important; }
+.rojo     { background-color: #f87171 !important; color: white !important; }
+.rosa     { background-color: #f8c5dd !important; }
+.gris     { background-color: #eee !important; color: #aaa !important; }
+
+.cuadro {
+  width: 14px;
+  height: 14px;
+  border: 1px solid #999;
+  display: inline-block;
+  border-radius: 2px;
+}

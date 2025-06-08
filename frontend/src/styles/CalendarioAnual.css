@@ -1,0 +1,64 @@
+.calendario-anual {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px; 
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 10px;
+    justify-items: center;
+  }
+  
+  .mes {
+    width: 100%;
+    max-width: 200px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .mes-nombre {
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  
+  .cabecera {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    font-weight: bold;
+    font-size: 11px;
+    text-align: center;
+    background-color: #f2f2f2;
+  }
+  
+  .dia-semana {
+    padding: 2px 0;
+    border: 1px solid #e0e0e0;
+  }
+  
+  .cuadricula {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+  }
+  
+  .celda {
+    height: 24px;
+    width: 100%;
+    font-size: 11px;
+    display: flex;
+    align-items: center;  
+    justify-content: center; 
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+  
+ 
+  @media (max-width: 767px) {
+    .calendario-anual {
+      display: none; 
+    }
+  }
+   

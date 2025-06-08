@@ -1,0 +1,145 @@
+/* src/styles/Landing.css */
+
+.titulo-landing {
+  font-size: 2.2rem;
+  font-weight: bold;
+  text-align: center;
+  margin: 40px 20px 20px;
+  color: #1f2937; /* gris oscuro */
+}
+
+.landing-contenido {
+  padding: 24px;
+  text-align: center;
+}
+
+.landing-contenido h1 {
+  margin-bottom: 16px;
+  font-size: 24px;
+}
+
+.landing-btn-entrar {
+  padding: 8px 16px;
+  border: 1px solid #2563eb;
+  background-color: white;
+  color: #2563eb;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.landing-btn-entrar:hover {
+  background-color: #2563eb;
+  color: white;
+}
+
+.leyenda-colores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin-top: 24px;
+  justify-content: center;
+  font-size: 14px;
+  color: #333;
+}
+
+.leyenda-colores div {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cuadro {
+  width: 14px;
+  height: 14px;
+  border: 1px solid #999;
+  display: inline-block;
+  border-radius: 2px;
+}
+
+@media (max-width: 767px) {
+  .leyenda-colores {
+    max-width: 300px;
+    margin: 24px auto 0;
+    justify-content: center;
+  }
+
+  .leyenda-colores div {
+    width: 45%;
+  }
+}
+
+.info-calendario {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin: 40px auto;
+  padding: 24px;
+  max-width: 880px;
+  background-color: #fdfdfd;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.info-columna {
+  flex: 1;
+  min-width: 300px;
+}
+
+.info-columna h3 {
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+  text-align: left;
+  color: #111;
+  line-height: 1.2;
+}
+
+.info-columna ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.info-columna li {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  text-align: left;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.festivos-dos-columnas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 24px;
+}
+
+@media (max-width: 767px) {
+  .info-calendario {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 8px;
+  }
+
+  .info-columna {
+    width: 100%;
+  }
+
+  .festivos-dos-columnas {
+    grid-template-columns: 1fr;
+  }
+
+  .info-columna h3 {
+    font-size: 1rem;
+    text-align: left;
+    margin-top: 16px;
+  }
+
+  .info-columna li {
+    font-size: 14.5px;
+  }
+}

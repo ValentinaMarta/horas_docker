@@ -1,0 +1,19 @@
+.panel-container {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  .panel-main {
+    flex: 1;
+    padding: 2rem;
+    background-color: #fff;
+    overflow-y: auto;
+  }
+  /* src/styles/Panel.css */
+.panel-layout {
+  display: flex;
+  height: 100vh;
+}
+
+
