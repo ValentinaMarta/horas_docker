@@ -3,7 +3,7 @@
 
 **HORAS** es una aplicación web desarrollada para pequeñas empresas que necesitan gestionar de manera digital y centralizada el registro de horas trabajadas y las solicitudes de vacaciones. El sistema permite a los empleados registrar su jornada y solicitar vacaciones, y a los administradores aprobar o rechazar las peticiones, consultar calendarios y generar reportes.
 
-![Calendario anual](./public/images/calendario-anual.png)
+![Calendario anual](frontend/images/calendario-anual.png)
 
 ---
 
@@ -23,15 +23,15 @@
 
 ### Calendario anual con jornadas laborales y festivos
 
-![Calendario anual](./public/images/calendario-anual.png)
+![Calendario anual](frontend/images/calendario-anual.png)
 
 ### Interfaz de usuario – Panel de empleado
 
-![Ficha de usuario](./public/images/ficha-usuario.png)
+![Ficha de usuario](frontend/images/ficha-usuario.png)
 
 ### Vista de base de datos en pgAdmin
 
-![Base de datos](./public/images/base-datos-pgadmin.png)
+![Base de datos](frontend/images/base-datos-pgadmin.png)
 
 ---
 
