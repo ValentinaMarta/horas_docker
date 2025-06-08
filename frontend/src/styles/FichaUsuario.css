@@ -60,12 +60,12 @@
   background-color: white;
 }
 .seleccionado-vacaciones {
-  background-color: #fde68a !important; /* Amarillo claro */
+  background-color: #fde68a !important; 
   border-radius: 50%;
 }
 
 .seleccionado-fichajes {
-  background-color: #bae6fd !important; /* Azul claro */
+  background-color: #bae6fd !important; 
   border-radius: 50%;
 }
 

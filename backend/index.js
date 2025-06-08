@@ -10,11 +10,11 @@ app.use(cors());
 // Rutas
 const authRoutes = require('./routes/auth');
 const usuariosRoutes = require('./routes/usuarios');
-const vacacionesRoutes = require('./routes/vacaciones'); // ✅ AÑADIR ESTA LÍNEA
+const vacacionesRoutes = require('./routes/vacaciones'); 
 
 app.use('/login', authRoutes);
 app.use('/usuarios', usuariosRoutes);
-app.use('/vacaciones', vacacionesRoutes); // ✅ AÑADIR ESTA LÍNEA
+app.use('/vacaciones', vacacionesRoutes);
 
 app.get('/', (req, res) => {
   res.send('API de Horas funcionando ✅');
