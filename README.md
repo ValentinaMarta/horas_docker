@@ -104,14 +104,8 @@ Disponible en la carpeta `/docs` del proyecto, incluyendo:
 
 ---
 
-## 👤 Autor
+## 👤 Autor Valentina Florina Marta
 
 Proyecto desarrollado como aplicación final de ciclo formativo.  
-Más información en la [memoria técnica](./docs/Memoria_HORAS.pdf).
+Más información en la memoria técnica.
 
----
-
-## 📄 Licencia
-
-Este proyecto está publicado bajo la licencia MIT.
-# horas_docker
