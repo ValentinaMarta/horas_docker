@@ -23,15 +23,15 @@
 
 ### Calendario anual con jornadas laborales y festivos
 
-![Calendario anual](frontend/images/calendario-anual.png)
+![Calendario anual](imagenes/calendario-anual.png)
 
 ### Interfaz de usuario – Panel de empleado
 
-![Ficha de usuario](frontend/images/ficha-usuario.png)
+![Ficha de usuario](imagenes/ficha-usuario.png)
 
 ### Vista de base de datos en pgAdmin
 
-![Base de datos](frontend/images/base-datos-pgadmin.png)
+![Base de datos](imagenes/base-datos-pgadmin.png)
 
 ---
 
