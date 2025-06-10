@@ -19,9 +19,9 @@ const Sidebar = ({ rol, setPestana, pestanaActiva }) => {
 
         {rol === 'administrador' && (
           <>
-            {renderOpcion('usuarios', '📁', 'Usuarios')}
             {renderOpcion('fichajes', '📊', 'Fichajes')}
             {renderOpcion('vacaciones', '📅', 'Vacaciones')}
+            {renderOpcion('usuarios', '📁', 'Usuarios')}
           </>
         )}
 

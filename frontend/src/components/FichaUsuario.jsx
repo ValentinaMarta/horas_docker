@@ -10,7 +10,6 @@ import { AuthContext } from '../context/AuthContext';
 const FichaUsuario = () => {
   const { id: idURL } = useParams();
   const { usuario } = useContext(AuthContext);
-  
   const id = idURL || usuario?.id;
 
   const [vacaciones, setVacaciones] = useState({});
@@ -19,9 +18,6 @@ const FichaUsuario = () => {
   const [email, setEmail] = useState('');
   const [rol, setRol] = useState('');
   const [mensaje, setMensaje] = useState('');
-
-  const [editando, setEditando] = useState(false);
-  const [form, setForm] = useState({ nombre: '', email: '', rol: '', contraseña: '' });
 
   const festivos = ['2025-01-01', '2025-01-06', '2025-04-17', '2025-04-18', '2025-05-01',
     '2025-05-02', '2025-05-15', '2025-07-25', '2025-08-15', '2025-11-01',
@@ -32,18 +28,18 @@ const FichaUsuario = () => {
   const esVerano = (fecha) => fecha >= INICIO_VERANO && fecha <= FIN_VERANO;
 
   useEffect(() => {
-    if (!id) return; // Esperamos hasta tener el id definido
-  
+    if (!id) return;
+
     const cargarDatos = async () => {
       try {
         const vacacionesData = await getVacaciones(id);
         const fichajesData = await getFichajes(id);
-  
+
         const vac = {}, fich = {};
         setNombre(vacacionesData.nombre || 'Usuario');
         setEmail(vacacionesData.email || '');
         setRol(vacacionesData.rol || '');
-  
+
         vacacionesData.vacaciones.forEach(v => {
           const inicio = new Date(v.fecha_inicio);
           const fin = new Date(v.fecha_fin);
@@ -52,26 +48,21 @@ const FichaUsuario = () => {
             if (v.estado === 'Solicitada') vac[key] = true;
           }
         });
-  
+
         fichajesData.forEach(f => {
           const key = f.fecha;
           fich[key] = true;
         });
-  
+
         setVacaciones(vac);
         setFichajes(fich);
       } catch (err) {
-        console.error('Error al cargar datos:', err);
         setMensaje('Error al cargar los datos del usuario.');
       }
     };
-  
+
     cargarDatos();
   }, [id]);
-
-  useEffect(() => {
-    setForm({ nombre, email, rol, contraseña: '' });
-  }, [nombre, email, rol]);
 
   const mostrarMensaje = (texto) => {
     setMensaje(texto);
@@ -80,11 +71,15 @@ const FichaUsuario = () => {
 
   const manejarSeleccion = (fecha, tipo) => {
     const key = fecha.toISOString().split('T')[0];
+    const hoy = new Date().toISOString().split('T')[0];
+
     if (tipo === 'Solicitada') {
       if (fichajes[key]) return mostrarMensaje('Ese día ya está fichado.');
       setVacaciones(prev => ({ ...prev, [key]: !prev[key] }));
     }
+
     if (tipo === 'Fichado manual') {
+      if (fecha > new Date()) return mostrarMensaje('No puedes fichar fechas futuras.');
       if (vacaciones[key]) return mostrarMensaje('Ese día ya está marcado como vacaciones.');
       setFichajes(prev => ({ ...prev, [key]: !prev[key] }));
     }
@@ -124,29 +119,26 @@ const FichaUsuario = () => {
     generarExcelDesdeBD({ nombre }, registros);
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
-  };
-
-  const guardarCambios = async () => {
+  const guardarSeleccion = async () => {
     try {
-      const datos = {
-        nombre: form.nombre,
-        email: form.email,
-        rol: form.rol,
-      };
-      if (form.contraseña && form.contraseña.trim() !== '') {
-        datos.contraseña = form.contraseña;
-      }
-      await updateUsuario(id, datos);
-      setNombre(form.nombre);
-      setEmail(form.email);
-      setRol(form.rol);
-      setEditando(false);
-      mostrarMensaje('Datos actualizados correctamente');
+      const vacacionesSeleccionadas = Object.keys(vacaciones).filter(k => vacaciones[k]);
+      const fichajesSeleccionados = Object.keys(fichajes).filter(k => fichajes[k]);
+
+      const registros = [
+        ...vacacionesSeleccionadas.map(fecha => ({ fecha_inicio: fecha, fecha_fin: fecha, estado: 'Solicitada' })),
+        ...fichajesSeleccionados.map(fecha => ({ fecha_inicio: fecha, fecha_fin: fecha, estado: 'Fichado manual' }))
+      ];
+
+      await fetch(`/vacaciones/usuario/${id}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ registros }),
+      });
+
+      mostrarMensaje('Cambios guardados correctamente');
     } catch (err) {
-      mostrarMensaje('Error al guardar cambios');
+      console.error('Error al guardar selección:', err);
+      mostrarMensaje('Error al guardar los cambios');
     }
   };
 
@@ -154,31 +146,10 @@ const FichaUsuario = () => {
     <div className="ficha-usuario">
       {mensaje && <div className="mensaje-emergente">{mensaje}</div>}
 
-      {editando ? (
-        <div className="form-edicion">
-          <input name="nombre" value={form.nombre} onChange={handleChange} />
-          <input name="email" value={form.email} onChange={handleChange} />
-          <select name="rol" value={form.rol} onChange={handleChange}>
-            <option value="administrador">Administrador</option>
-            <option value="empleado">Empleado</option>
-          </select>
-          <input
-            name="contraseña"
-            type="password"
-            value={form.contraseña}
-            placeholder="Nueva contraseña (opcional)"
-            onChange={handleChange}
-          />
-          <button onClick={guardarCambios}>Guardar</button>
-          <button onClick={() => setEditando(false)}>Cancelar</button>
-        </div>
-      ) : (
-        <div className="ficha-header">
-          <h2>{nombre}</h2>
-          <p>{email} — {rol}</p>
-          {usuario?.rol === 'administrador' && <button onClick={() => setEditando(true)}>Editar</button>}
-        </div>
-      )}
+      <div className="ficha-header">
+        <h2>{nombre}</h2>
+        <p>{email} — {rol}</p>
+      </div>
 
       <div className="calendarios-container">
         <div className="calendario-bloque">
@@ -203,9 +174,14 @@ const FichaUsuario = () => {
         Total horas trabajadas: {totalHoras.toFixed(1)}
       </div>
 
-      <button className="btn-exportar" onClick={exportar}>
-        Exportar a Excel
-      </button>
+      <div style={{ marginTop: '1rem', display: 'flex', gap: '1rem' }}>
+        <button className="btn-exportar" onClick={exportar}>
+          Exportar a Excel
+        </button>
+        <button className="btn-guardar" onClick={guardarSeleccion}>
+          Guardar cambios
+        </button>
+      </div>
     </div>
   );
 };
