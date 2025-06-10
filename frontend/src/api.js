@@ -71,6 +71,14 @@ export const getVacaciones = async (usuarioId) => {
     return [];
   }
 };
+// GUARDAR VACACIONES
+export const saveVacaciones = async (userId, body) => {
+  return fetch(`/vacaciones/usuario/${userId}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+};
 
 /* ───────────────────────────────────────
    FICHAJES
@@ -83,4 +91,12 @@ export const getFichajes = async (usuarioId) => {
     console.error(`Error obteniendo fichajes del usuario ${usuarioId}:`, error.response?.data || error.message);
     return [];
   }
+};
+// GUARDAR FICHAJES
+export const saveFichajes = async (userId, body) => {
+  return fetch(`/fichajes/usuario/${userId}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
 };

@@ -1,9 +1,9 @@
-const express = require('express');
-const router = express.Router();
-const pool = require('../db');
-const bcrypt = require('bcryptjs');
-const verificarToken = require('../middlewares/verificarToken');
+import express from 'express';
+import pool from '../db.js';
+import bcrypt from 'bcryptjs';
+import verificarToken from '../middlewares/verificarToken.js';
 
+const router = express.Router();
 const SALT_ROUNDS = 10;
 
 // Obtener lista de usuarios, opcionalmente filtrados por rol
@@ -51,8 +51,8 @@ router.post('/registrar', verificarToken, async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 // Actualizar usuario (solo para administradores o el mismo usuario)
-// PUT /usuarios/:id
 router.put('/:id', async (req, res) => {
   const { nombre, email, contraseña, rol } = req.body;
   const { id } = req.params;
@@ -96,5 +96,4 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-
-module.exports = router;
+export default router;

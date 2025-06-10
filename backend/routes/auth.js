@@ -1,7 +1,9 @@
-const bcrypt = require('bcryptjs');
-const pool = require('../db');
-const router = require('express').Router();
-const jwt = require('jsonwebtoken');
+import bcrypt from 'bcryptjs';
+import pool from '../db.js';
+import express from 'express';
+import jwt from 'jsonwebtoken';
+
+const router = express.Router();
 
 const JWT_SECRET = process.env.JWT_SECRET || 'secreto-super-seguro';
 
@@ -49,5 +51,4 @@ router.post('/', async (req, res) => {
   }
 });
 
-
-module.exports = router;
+export default router;

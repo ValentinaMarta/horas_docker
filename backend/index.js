@@ -1,6 +1,10 @@
-const express = require('express');
-const cors = require('cors');
-const pool = require('./db');
+import express from 'express';
+import cors from 'cors';
+import pool from './db.js';
+
+import authRoutes from './routes/auth.js';
+import usuariosRoutes from './routes/usuarios.js';
+import vacacionesRoutes from './routes/vacaciones.js';
 
 const app = express();
 
@@ -8,10 +12,6 @@ app.use(express.json());
 app.use(cors());
 
 // Rutas
-const authRoutes = require('./routes/auth');
-const usuariosRoutes = require('./routes/usuarios');
-const vacacionesRoutes = require('./routes/vacaciones'); 
-
 app.use('/login', authRoutes);
 app.use('/usuarios', usuariosRoutes);
 app.use('/vacaciones', vacacionesRoutes);

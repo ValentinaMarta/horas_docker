@@ -1,10 +1,11 @@
-const { Pool } = require('pg');
+import pkg from 'pg';
+const { Pool } = pkg;
 
 const pool = new Pool({
-  user: 'postgres',         
-  host: 'horas_postgres',  
+  user: 'postgres',
+  host: 'horas_postgres',
   database: 'horas',
-  password: 'postgres', 
+  password: 'postgres',
   port: 5432,
 });
 
@@ -14,4 +15,4 @@ pool.connect()
   })
   .catch(err => console.error("❌ Error de conexión a PostgreSQL:", err));
 
-module.exports = pool;
+export default pool;

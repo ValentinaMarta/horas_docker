@@ -5,6 +5,8 @@ import Sidebar from './Sidebar';
 import Perfil from './Perfil';
 import Usuarios from './Usuarios';
 import FichaUsuario from './FichaUsuario';
+import Vacaciones from './Vacaciones';    // <-- Importa el nuevo componente
+import Fichajes from './Fichajes';        // <-- Importa el nuevo componente
 import '../styles/Panel.css';
 import { AuthContext } from '../context/AuthContext';
 
@@ -16,17 +18,20 @@ const Panel = () => {
   const renderContenido = () => {
     if (!usuario) return <div>No autorizado</div>;
 
-    if (id) return <FichaUsuario />;
+    // Si hay id en la URL, mostrar la ficha del usuario seleccionado
+    if (id) return <FichaUsuario usuarioId={id} />;
 
     switch (pestana) {
       case 'perfil':
         return <Perfil />;
       case 'usuarios':
-        return usuario.rol === 'administrador' ? <Usuarios /> : <div>No tienes permiso para ver esta sección.</div>;
+        return usuario.rol === 'administrador'
+          ? <Usuarios />
+          : <div>No tienes permiso para ver esta sección.</div>;
       case 'fichajes':
-        return <div>Página de fichajes (en construcción)</div>;
+        return <Fichajes />;     // <-- Pestaña fichajes
       case 'vacaciones':
-        return <div>Página de vacaciones (en construcción)</div>;
+        return <Vacaciones />;   // <-- Pestaña vacaciones
       default:
         return <Perfil />;
     }

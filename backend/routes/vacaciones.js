@@ -1,14 +1,13 @@
-// routes/vacaciones.js
-const express = require('express');
-const router = express.Router();
-const pool = require('../db');
+import express from 'express';
+import pool from '../db.js';
 
-// Obtener vacaciones/fichajes por ID de usuario
+const router = express.Router();
+// Obtener vacaciones por ID de usuario
 router.get('/usuario/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const query = `
-      SELECT v.*, u.nombre
+      SELECT v.*, u.nombre, u.email
       FROM vacaciones v
       JOIN usuarios u ON u.id = v.usuario_id
       WHERE usuario_id = $1
@@ -24,26 +23,29 @@ router.get('/usuario/:id', async (req, res) => {
   }
 });
 
-// (Opcional futuro)
-// Guardar registros de fichajes y vacaciones
-// router.post('/usuario/:id', async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const registros = req.body; // [{ fecha_inicio, fecha_fin, estado, comentario_admin }]
-//     const insertQuery = `
-//       INSERT INTO vacaciones (usuario_id, fecha_inicio, fecha_fin, estado, comentario_admin)
-//       VALUES ($1, $2, $3, $4, $5)
-//     `;
+// Guardar registros de vacaciones
+router.post('/usuario/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { registros } = req.body; // [{ fecha_inicio, fecha_fin, estado }]
+    const insertQuery = `
+      INSERT INTO vacaciones (usuario_id, fecha_inicio, fecha_fin, estado)
+      VALUES ($1, $2, $3, $4)
+      ON CONFLICT (usuario_id, fecha_inicio) DO NOTHING
+    `;
 
-//     for (const reg of registros) {
-//       await pool.query(insertQuery, [id, reg.fecha_inicio, reg.fecha_fin, reg.estado, reg.comentario_admin || '']);
-//     }
+    for (const reg of registros) {
+      await pool.query(insertQuery, [id, reg.fecha_inicio, reg.fecha_fin, reg.estado]);
+    }
 
-//     res.status(201).json({ mensaje: 'Registros guardados correctamente' });
-//   } catch (error) {
-//     console.error('❌ Error al guardar registros:', error.message);
-//     res.status(500).json({ error: 'Error al guardar registros' });
-//   }
-// });
+    res.status(201).json({ mensaje: 'Vacaciones guardadas correctamente' });
+  } catch (error) {
+    console.error('❌ Error al guardar vacaciones:', error.message);
+    res.status(500).json({ error: 'Error al guardar vacaciones' });
+  }
+});
 
-module.exports = router;
+export default router;
+
+
+

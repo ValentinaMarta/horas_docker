@@ -1,10 +1,11 @@
+
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import '../styles/FichaUsuario.css';
 import { generarExcelDesdeBD } from '../utils/exportExcel';
-import { getVacaciones, getFichajes, updateUsuario } from '../api';
+import { getVacaciones, getFichajes } from '../api';
 import { AuthContext } from '../context/AuthContext';
 
 const FichaUsuario = () => {
@@ -71,8 +72,6 @@ const FichaUsuario = () => {
 
   const manejarSeleccion = (fecha, tipo) => {
     const key = fecha.toISOString().split('T')[0];
-    const hoy = new Date().toISOString().split('T')[0];
-
     if (tipo === 'Solicitada') {
       if (fichajes[key]) return mostrarMensaje('Ese día ya está fichado.');
       setVacaciones(prev => ({ ...prev, [key]: !prev[key] }));
@@ -82,6 +81,46 @@ const FichaUsuario = () => {
       if (fecha > new Date()) return mostrarMensaje('No puedes fichar fechas futuras.');
       if (vacaciones[key]) return mostrarMensaje('Ese día ya está marcado como vacaciones.');
       setFichajes(prev => ({ ...prev, [key]: !prev[key] }));
+    }
+  };
+
+  const guardarVacaciones = async () => {
+    try {
+      const seleccionados = Object.entries(vacaciones).filter(([fecha, activo]) => activo);
+      await fetch(`http://localhost:4000/vacaciones/usuario/${id}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          registros: seleccionados.map(([fecha]) => ({
+            fecha_inicio: fecha,
+            fecha_fin: fecha,
+            estado: 'Solicitada'
+          }))
+        })
+      });
+      mostrarMensaje('Vacaciones guardadas');
+    } catch (error) {
+      mostrarMensaje('Error al guardar vacaciones');
+    }
+  };
+
+  const guardarFichajes = async () => {
+    try {
+      const seleccionados = Object.entries(fichajes).filter(([fecha, activo]) => activo);
+      await fetch(`http://localhost:4000/fichajes/usuario/${id}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          registros: seleccionados.map(([fecha]) => ({
+            fecha_inicio: fecha,
+            fecha_fin: fecha,
+            estado: 'Fichado manual'
+          }))
+        })
+      });
+      mostrarMensaje('Fichajes guardados');
+    } catch (error) {
+      mostrarMensaje('Error al guardar fichajes');
     }
   };
 
@@ -101,45 +140,15 @@ const FichaUsuario = () => {
     return null;
   };
 
-  const totalVacaciones = Object.values(vacaciones).filter(Boolean).length;
-  const totalHoras = Object.entries(fichajes).reduce((sum, [fecha, marcado]) => {
-    if (!marcado) return sum;
-    const fechaObj = new Date(fecha);
-    return sum + (esVerano(fechaObj) ? 6.5 : 8);
-  }, 0);
-
   const exportar = () => {
     const registros = [];
     for (const [fecha, activo] of Object.entries(vacaciones)) {
-      if (activo) registros.push({ fecha_inicio: fecha, fecha_fin: fecha, estado: 'Solicitada', comentario_admin: '' });
+      if (activo) registros.push({ fecha_inicio: fecha, fecha_fin: fecha, estado: 'Solicitada' });
     }
     for (const [fecha, activo] of Object.entries(fichajes)) {
-      if (activo) registros.push({ fecha_inicio: fecha, fecha_fin: fecha, estado: 'Fichado manual', comentario_admin: '' });
+      if (activo) registros.push({ fecha_inicio: fecha, fecha_fin: fecha, estado: 'Fichado manual' });
     }
     generarExcelDesdeBD({ nombre }, registros);
-  };
-
-  const guardarSeleccion = async () => {
-    try {
-      const vacacionesSeleccionadas = Object.keys(vacaciones).filter(k => vacaciones[k]);
-      const fichajesSeleccionados = Object.keys(fichajes).filter(k => fichajes[k]);
-
-      const registros = [
-        ...vacacionesSeleccionadas.map(fecha => ({ fecha_inicio: fecha, fecha_fin: fecha, estado: 'Solicitada' })),
-        ...fichajesSeleccionados.map(fecha => ({ fecha_inicio: fecha, fecha_fin: fecha, estado: 'Fichado manual' }))
-      ];
-
-      await fetch(`/vacaciones/usuario/${id}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ registros }),
-      });
-
-      mostrarMensaje('Cambios guardados correctamente');
-    } catch (err) {
-      console.error('Error al guardar selección:', err);
-      mostrarMensaje('Error al guardar los cambios');
-    }
   };
 
   return (
@@ -158,6 +167,7 @@ const FichaUsuario = () => {
             tileClassName={tileClassNameVacaciones}
             onClickDay={(date) => manejarSeleccion(date, 'Solicitada')}
           />
+          <button className="btn-exportar"  onClick={guardarVacaciones}>Guardar vacaciones</button>
         </div>
 
         <div className="calendario-bloque">
@@ -166,22 +176,24 @@ const FichaUsuario = () => {
             tileClassName={tileClassNameFichajes}
             onClickDay={(date) => manejarSeleccion(date, 'Fichado manual')}
           />
+          <button className="btn-exportar" onClick={guardarFichajes}>Guardar fichajes</button>
         </div>
       </div>
 
       <div style={{ marginTop: '1rem', fontWeight: 'bold' }}>
-        Días de vacaciones gastados: {totalVacaciones} <br />
-        Total horas trabajadas: {totalHoras.toFixed(1)}
+        Días de vacaciones gastados: {Object.values(vacaciones).filter(Boolean).length} <br />
+        Total horas trabajadas: {
+          Object.entries(fichajes).reduce((sum, [fecha, activo]) => {
+            if (!activo) return sum;
+            const f = new Date(fecha);
+            return sum + (esVerano(f) ? 6.5 : 8);
+          }, 0).toFixed(1)
+        }
       </div>
 
-      <div style={{ marginTop: '1rem', display: 'flex', gap: '1rem' }}>
-        <button className="btn-exportar" onClick={exportar}>
-          Exportar a Excel
-        </button>
-        <button className="btn-guardar" onClick={guardarSeleccion}>
-          Guardar cambios
-        </button>
-      </div>
+      <button className="btn-exportar" onClick={exportar}>
+        Exportar a Excel
+      </button>
     </div>
   );
 };

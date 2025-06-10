@@ -8,6 +8,8 @@ import Landing from './components/Landing';
 import LoginModal from './components/LoginModal';
 import Panel from './components/Panel';
 import { AuthContext } from './context/AuthContext';
+import Vacaciones from './components/Vacaciones'; // o la ruta correcta
+import Fichajes from './components/Fichajes'; // o la ruta correcta
 
 function App() {
   const [logueado, setLogueado] = useState(false);
@@ -74,6 +76,9 @@ function App() {
         <Route path="/" element={<Landing logueado={logueado} />} />
         <Route path="/panel" element={<Panel />} />
         <Route path="/panel/:id" element={<Panel />} />
+        <Route path="/vacaciones" element={<Vacaciones />} />
+        <Route path="/fichajes"   element={<Fichajes />} />
+
       </Routes>
 
       {!logueado && mostrarLogin && (
