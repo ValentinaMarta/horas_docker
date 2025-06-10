@@ -7,7 +7,6 @@ import Navbar from './components/Navbar';
 import Landing from './components/Landing';
 import LoginModal from './components/LoginModal';
 import Panel from './components/Panel';
-import FichaUsuario from './components/FichaUsuario';
 import { AuthContext } from './context/AuthContext';
 
 function App() {
@@ -22,13 +21,14 @@ function App() {
       try {
         const decoded = jwtDecode(token);
         if (Date.now() / 1000 < decoded.exp) {
-          setLogueado(true);
-          setUsuario({
+          const userData = {
             id: decoded.id,
             nombre: decoded.nombre || decoded.email || 'Usuario',
             rol: decoded.rol,
             email: decoded.email
-          });
+          };
+          setUsuario(userData);
+          setLogueado(true);
           navigate('/panel');
         } else {
           localStorage.removeItem('token');
@@ -42,12 +42,13 @@ function App() {
   const handleLoginSuccess = (token) => {
     localStorage.setItem('token', token);
     const decoded = jwtDecode(token);
-    setUsuario({
+    const userData = {
       id: decoded.id,
       nombre: decoded.nombre || decoded.email || 'Usuario',
       rol: decoded.rol,
       email: decoded.email
-    });
+    };
+    setUsuario(userData);
     setLogueado(true);
     setMostrarLogin(false);
     navigate('/panel');
@@ -71,8 +72,8 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Landing logueado={logueado} />} />
-        <Route path="/panel" element={<Panel rol={usuario?.rol} />} />
-        <Route path="/ficha/:id" element={<FichaUsuario />} />
+        <Route path="/panel" element={<Panel />} />
+        <Route path="/panel/:id" element={<Panel />} />
       </Routes>
 
       {!logueado && mostrarLogin && (

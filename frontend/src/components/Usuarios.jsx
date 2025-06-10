@@ -5,9 +5,7 @@ import { getUsuarios, createUsuario } from '../api';
 import { useNavigate } from 'react-router-dom';
 
 const Usuarios = () => {
-  const { usuario } = useContext(AuthContext);
-  console.log('Usuario actual:', usuario);
-
+  const { usuario, loading } = useContext(AuthContext);
   const [usuarios, setUsuarios] = useState([]);
   const [nuevo, setNuevo] = useState({ nombre: '', email: '', contraseña: '', rol: 'empleado' });
   const navigate = useNavigate();
@@ -38,11 +36,15 @@ const Usuarios = () => {
     }
   };
 
-  if (!usuario) return <p>Cargando usuario…</p>;
-
-  if (usuario.rol !== 'administrador') {
-    return <p>No tienes permiso para ver esta sección.</p>;
+  if (loading) return <p>Cargando…</p>;
+  if (!usuario) {
+    console.log("🚫 Usuario nulo en Usuarios.jsx");
+    return <p>Usuario no autenticado.</p>;
   }
+
+  console.log("🧪 Usuario en Usuarios.jsx:", usuario);
+
+  if (usuario.rol !== 'administrador') return <p>No tienes permiso para ver esta sección.</p>;
 
   return (
     <div className="panel" style={{ padding: '2rem' }}>
@@ -85,7 +87,7 @@ const Usuarios = () => {
           <li
             key={u.id}
             style={{ cursor: 'pointer', marginBottom: '0.5rem' }}
-            onClick={() => navigate(`/usuarios/${u.id}`)}
+            onClick={() => navigate(`/panel/${u.id}`)}
           >
             {u.nombre} – {u.email} ({u.rol})
           </li>

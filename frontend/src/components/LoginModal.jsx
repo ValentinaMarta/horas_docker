@@ -3,7 +3,8 @@ import '../styles/LoginModal.css';
 import { AuthContext } from '../context/AuthContext';
 import jwt_decode from 'jwt-decode';
 
-const API = '/login';
+const API = 'http://localhost:4000/login';
+
 
 const LoginModal = ({ onClose, onLoginSuccess }) => {
   const inputRef = useRef(null);

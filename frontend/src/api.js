@@ -3,6 +3,7 @@ import axios from "axios";
 
 const API_URL = ""; // usa '' si usas proxy
 
+
 const authHeader = () => ({
   headers: {
     Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -30,15 +31,23 @@ export const deleteUsuario = async (id) => {
   }
 };
 
-export const createUsuario = async (nuevoUsuario) => {
-  try {
-    const response = await axios.post(`${API_URL}/usuarios`, nuevoUsuario, authHeader());
-    return response.data;
-  } catch (error) {
-    console.error("Error creando usuario:", error.response?.data || error.message);
-    throw error;
-  }
+
+
+export const createUsuario = async (usuario) => {
+  const token = localStorage.getItem('token');
+  const res = await fetch(`${API_URL}/usuarios/registrar`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify(usuario)
+  });
+
+  if (!res.ok) throw new Error('Error al crear usuario');
+  return await res.json();
 };
+
 
 export const updateUsuario = async (id, datosActualizados) => {
   try {
