@@ -5,6 +5,8 @@ import pool from './db.js';
 import authRoutes from './routes/auth.js';
 import usuariosRoutes from './routes/usuarios.js';
 import vacacionesRoutes from './routes/vacaciones.js';
+import fichajesRoutes from './routes/fichajes.js';
+
 
 const app = express();
 
@@ -15,6 +17,7 @@ app.use(cors());
 app.use('/login', authRoutes);
 app.use('/usuarios', usuariosRoutes);
 app.use('/vacaciones', vacacionesRoutes);
+app.use('/fichajes', fichajesRoutes);
 
 app.get('/', (req, res) => {
   res.send('API de Horas funcionando ✅');
